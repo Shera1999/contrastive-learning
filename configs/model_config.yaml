@@ -1,0 +1,11 @@
+model:
+  selected_model: "simclr"  # Change to "nnclr" for NNCLR
+  simclr:
+    backbone: "resnet18"  # Options: resnet18, resnet34, resnet50
+    projection_dim: 128
+    hidden_dim: 512
+  nnclr:
+    backbone: "resnet18"
+    queue_size: 4096
+    projection_dim: 128
+    hidden_dim: 512

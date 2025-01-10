@@ -1,0 +1,50 @@
+augmentations:
+  shape_invariances:
+    random_crop:
+      enabled: 1
+      px: [64, 128]
+    random_horizontal_flip:
+      enabled: 1
+      prob: 0.5
+    random_vertical_flip:
+      enabled: 1
+      prob: 0.5
+    random_rotation:
+      enabled: 1
+      degrees: [-90, 90]  # Extended to ±90°
+
+  geometric_transformations:
+    zoom:
+      enabled: 1
+      scale: [0.9, 1.1]  # Zoom range: 90% to 110%
+    affine_translation:
+      enabled: 1
+      translate_percent: [0, 0.25]  # Up to 25% translation
+
+  texture_invariances:
+    gaussian_blur:
+      enabled: 1
+      sigma: [0.001, 1.0]  # Updated blur range
+    noise:
+      enabled: 0
+      mean: [0.01, 0.08]
+      std: [0.01, 0.08]
+    clipping:
+      enabled: 0  
+
+  color_invariances:
+    color_jitter:
+      enabled: 1
+      brightness: [0.8, 1.2]
+      contrast: [0.8, 1.2]
+      saturation: [0.9, 1.1]
+    random_grayscale:
+      enabled: 1
+      prob: 0.2
+    solarization:
+      enabled: 0
+      threshold: 128
+
+normalization:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]

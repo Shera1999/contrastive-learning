@@ -1,0 +1,35 @@
+# Ignore virtual environment
+new_venv/
+
+# Ignore Python cache files
+__pycache__/
+
+# Ignore logs
+*.log
+
+# Ignore any temporary files
+*.tmp
+
+tests/
+model_old
+setup.Python
+postprocessing_old/
+postprocessing_outputs/
+postprocessing_results/
+scripts/
+checkpoints/
+lightning_logs/
+scripts/
+tests/
+utils/
+embeddings_2d.npy
+embeddings.npy
+main.py
+setup.py
+temporary.py
+test_evaluation_pipeline.ipynb
+main.Python
+logs/
+HEY.ipynb
+.idea/
+

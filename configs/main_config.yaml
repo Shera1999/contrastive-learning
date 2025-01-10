@@ -1,0 +1,11 @@
+training:
+  batch_size: 64
+  input_size: 224
+  max_epochs: 100
+  num_workers: 4
+  device: gpu
+  learning_rate: 0.06
+
+normalization:
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
