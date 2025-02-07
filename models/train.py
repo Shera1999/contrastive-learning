@@ -2,6 +2,7 @@ import yaml
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from models.simclr import SimCLRModel
+from models.dino import DINOModel
 from data.data_loader import dataloader_train
 import torch
 
@@ -9,17 +10,36 @@ import torch
 torch.set_float32_matmul_precision("medium")
 
 # Load Configuration Files
-config_path = "configs/main_config.yaml"
-with open(config_path, "r") as file:
-    config = yaml.safe_load(file)
+main_config_path = "configs/main_config.yaml"
+model_config_path = "configs/model_config.yaml"
+
+with open(main_config_path, "r") as file:
+    main_config = yaml.safe_load(file)
+with open(model_config_path, "r") as file: 
+    model_config = yaml.safe_load(file)
+
+# Ensure 'model' key exists
+if "model" not in model_config:
+    raise KeyError("Missing 'model' key in model_config.yaml")
+
+# Get Selected Model
+selected_model = model_config["model"].get("selected_model", "simclr")  # Default: simclr
 
 # Training Parameters
-max_epochs = config["training"]["max_epochs"]
-device = "auto" if config["training"]["device"] == "gpu" else config["training"]["device"]
-learning_rate = config["training"].get("learning_rate", 6e-2)  # Default to 6e-2 if not set
+max_epochs = main_config["training"]["max_epochs"]
+device = "auto" if main_config["training"]["device"] == "gpu" else config["training"]["device"]
+
+learning_rate = model_config["model"].get(selected_model, {}).get("learning_rate", 0.001)# Default to 0.001 if not set
 
 # Initialize Model
-model = SimCLRModel(learning_rate=learning_rate, max_epochs=max_epochs)
+
+# Dynamically Select Model and Pass Learning Rate
+if selected_model == "simclr":
+    model = SimCLRModel(learning_rate=learning_rate, max_epochs=max_epochs)
+elif selected_model == "dino":
+    model = DINOModel(learning_rate=learning_rate, max_epochs=max_epochs)
+else:
+    raise ValueError(f"Unknown model selected: {selected_model}")
 
 # Checkpointing
 checkpoint_callback = ModelCheckpoint(

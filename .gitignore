@@ -32,4 +32,12 @@ main.Python
 logs/
 HEY.ipynb
 .idea/
-
+main2.ipynb
+.pytest_cache/
+dino_initial_jellyfish
+dino_initial_X-ray
+jellyfish_simclr_finalplots
+jellyfish_simclr_firstrun
+simclr_initial
+numpixels.ipynb
+jellyfish_seminar_plots

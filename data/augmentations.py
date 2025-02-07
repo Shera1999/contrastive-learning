@@ -6,6 +6,8 @@ import numpy as np
 from PIL import Image
 import random
 from lightly.transforms.multi_view_transform import MultiViewTransform
+from data.simclr_augmentations import get_simclr_transform
+from data.dino_augmentations import get_dino_transform
 
 class GaussianNoise:
     """Applies random Gaussian noise to a tensor.
@@ -36,53 +38,67 @@ class Augmentations:
         self.norm_mean = self.config["normalization"]["mean"]
         self.norm_std = self.config["normalization"]["std"]
 
-        # Define individual augmentations
-        self.augmentations_list = []
+        # Select augmentation mode
+        self.selected_transform = self.create_augmentations()
+
+    def create_augmentations(self):
+        """Creates and returns the selected augmentation strategy."""
+
+        if self.augmentations.get("use_simclr", False):
+            return get_simclr_transform()
+        
+        if self.augmentations.get("use_dino", False):
+            return get_dino_transform()
+
+        if self.augmentations.get("use_custom", False):
+            return self.create_custom_augmentations()
+
+        raise ValueError("Invalid augmentation settings. Enable one of 'use_simclr', 'use_dino', or 'use_custom' in augmentations_config.yaml.")
+        
+    # Define individual augmentations
+    def create_custom_augmentations(self):
+        augmentations_list = []
 
         if self.augmentations["shape_invariances"]["random_crop"]["enabled"]:
-            self.augmentations_list.append(
+            augmentations_list.append(
                 T.RandomResizedCrop(self.input_size, scale=(0.2, 1.0))
             )
         
         if self.augmentations["shape_invariances"]["random_horizontal_flip"]["enabled"]:
             prob = self.augmentations["shape_invariances"]["random_horizontal_flip"]["prob"]
-            self.augmentations_list.append(T.RandomHorizontalFlip(prob))
+            augmentations_list.append(T.RandomHorizontalFlip(prob))
 
         if self.augmentations["shape_invariances"]["random_vertical_flip"]["enabled"]:
             prob = self.augmentations["shape_invariances"]["random_vertical_flip"]["prob"]
-            self.augmentations_list.append(T.RandomVerticalFlip(prob))
+            augmentations_list.append(T.RandomVerticalFlip(prob))
 
         if self.augmentations["shape_invariances"]["random_rotation"]["enabled"]:
             degrees = self.augmentations["shape_invariances"]["random_rotation"]["degrees"]
-            self.augmentations_list.append(T.RandomRotation(degrees))
+            augmentations_list.append(T.RandomRotation(degrees))
 
         if self.augmentations["geometric_transformations"]["zoom"]["enabled"]:
             scale_range = self.augmentations["geometric_transformations"]["zoom"]["scale"]
-            self.augmentations_list.append(T.RandomAffine(degrees=0, scale=scale_range))
+            augmentations_list.append(T.RandomAffine(degrees=0, scale=scale_range))
 
         if self.augmentations["geometric_transformations"]["affine_translation"]["enabled"]:
             translate = self.augmentations["geometric_transformations"]["affine_translation"]["translate_percent"]
-            self.augmentations_list.append(T.RandomAffine(degrees=0, translate=translate))
+            augmentations_list.append(T.RandomAffine(degrees=0, translate=translate))
 
         if self.augmentations["texture_invariances"]["gaussian_blur"]["enabled"]:
             sigma_range = self.augmentations["texture_invariances"]["gaussian_blur"]["sigma"]
-            self.augmentations_list.append(T.GaussianBlur(kernel_size=(5, 5), sigma=sigma_range))
+            augmentations_list.append(T.GaussianBlur(kernel_size=(5, 5), sigma=sigma_range))
 
         if self.augmentations["texture_invariances"]["noise"]["enabled"]:
-            self.augmentations_list.append(GaussianNoise())  # Custom noise class
+            augmentations_list.append(GaussianNoise())  # Custom noise class
 
-        self.augmentations_list.extend([
+        augmentations_list.extend([
             V2.ToImage(),
             V2.ToDtype(torch.float32, scale=True),
             V2.Normalize(mean=self.norm_mean, std=self.norm_std)
         ])
 
-        # Compose transformations
-        self.view_transform = T.Compose(self.augmentations_list)
-
-        # MultiViewTransform: Generates two different augmented views for SimCLR
-        self.multi_view_transform = MultiViewTransform(transforms=[self.view_transform, self.view_transform])
+        return MultiViewTransform(transforms=[T.Compose(augmentations_list), T.Compose(augmentations_list)])
 
     def apply_augmentations(self, image):
         """Applies two different augmentations to a single image for SimCLR."""
-        return self.multi_view_transform(image)
+        return self.selected_transform(image)

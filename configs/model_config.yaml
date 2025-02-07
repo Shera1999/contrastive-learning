@@ -1,5 +1,7 @@
 model:
-  selected_model: "simclr"  # Change to "nnclr" for NNCLR
+  selected_model: "dino"  # options: simclr, nnclr, dino
+  
+  
   simclr:
     backbone: "resnet18"  # Options: resnet18, resnet34, resnet50
     projection_dim: 128
@@ -9,3 +11,12 @@ model:
     queue_size: 4096
     projection_dim: 128
     hidden_dim: 512
+
+  dino:
+    backbone: "resnet18"  # Options: resnet18, resnet34, resnet50, dino_vits16
+    input_dim: 512
+    hidden_dim: 512
+    output_dim: 2048
+    freeze_last_layer: 1
+    warmup_teacher_temp_epochs: 5
+    learning_rate: 0.001

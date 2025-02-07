@@ -1,4 +1,9 @@
 augmentations:
+  use_custom: True
+  use_simclr: False
+  use_dino: False
+
+
   shape_invariances:
     random_crop:
       enabled: 1
@@ -16,7 +21,7 @@ augmentations:
   geometric_transformations:
     zoom:
       enabled: 1
-      scale: [0.9, 1.1]  # Zoom range: 90% to 110%
+      scale: [0.1, 0.15]  # Zoom range: 90% to 110%
     affine_translation:
       enabled: 1
       translate_percent: [0, 0.25]  # Up to 25% translation
@@ -48,3 +53,51 @@ augmentations:
 normalization:
   mean: [0.485, 0.456, 0.406]
   std: [0.229, 0.224, 0.225]
+
+
+# parameters for the simCLR augmentations if use_simclr is True
+augmentations:
+  use_simclr: True
+  use_dino: False
+  use_custom: False
+
+  simclr_params:
+    cj_prob: 0.8 # Color jitter probability
+    cj_strength: 1.0 # Color jitter strength
+    cj_bright: 0.8 # Color jitter brightness
+    cj_contrast: 0.8  # Color jitter contrast
+    cj_sat: 0.8 # Color jitter saturation
+    cj_hue: 0.2 # Color jitter hue  
+    min_scale: 0.08 # Minimum scale for random resized crop
+    random_gray_scale: 0.2  # Random grayscale probability 
+    gaussian_blur: 0.5  # Gaussian blur probability
+    kernel_size: None # Gaussian blur kernel size
+    sigmas: [0.1, 2] # Gaussian blur sigma range
+    vf_prob: 0.0  # Vertical flip probability
+    hf_prob: 0.5  # Horizontal flip probability
+    rr_prob: 0.5  # Random rotation probability
+    rr_degrees: [-0, 0]   # Random rotation degrees
+
+
+  dino_params:
+    global_crop_size: 224   # Global crop size
+    global_crop_scale: [0.4, 1.0] # Global crop scale
+    local_crop_size: 96  # Local crop size
+    local_crop_scale: [0.05, 0.4] # Local crop scale
+    n_local_views: 6    # Number of local views
+    hf_prob: 0.5 # Horizontal flip probability
+    vf_prob: 0.0 # Vertical flip probability
+    rr_prob: 0.0 # Random rotation probability
+    rr_degrees: [-10, 10] # Random rotation degrees
+    cj_prob: 0.8 # Color jitter probability
+    cj_strength: 0.5  # Color jitter strength
+    cj_bright: 0.8 # Color jitter brightness
+    cj_contrast: 0.8 # Color jitter contrast
+    cj_sat: 0.4  # Color jitter saturation
+    cj_hue: 0.2 # Color jitter hue
+    random_gray_scale: 0.2 # Random grayscale probability
+    gaussian_blur: [1.0, 0.1, 0.5] # Gaussian blur probability
+    kernel_size: null # Gaussian blur kernel size
+    sigmas: [0.1, 2] # Gaussian blur sigma range
+    solarization_prob: 0.2 # Solarization probability
+

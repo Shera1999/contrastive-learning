@@ -2,13 +2,28 @@ import torch
 import numpy as np
 import umap
 from sklearn.preprocessing import normalize
-from models.simclr import SimCLRModel
+import yaml
 from data.data_loader import dataloader_test
 import os
 
+# Load model config
+config_path = "configs/model_config.yaml"
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+
+selected_model = config["model"]["selected_model"]
+
+if selected_model == "simclr":
+    from models.simclr import SimCLRModel as ModelClass
+elif selected_model == "dino":
+    from models.dino import DINOModel as ModelClass
+else:
+    raise ValueError(f"Model {selected_model} not supported")
+
+
 def load_model(model_path="checkpoints/final_model.pth", device="cuda" if torch.cuda.is_available() else "cpu"):
     """Loads the trained model from file."""
-    model = SimCLRModel()
+    model = ModelClass()
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
     model.eval()
@@ -24,7 +39,11 @@ def generate_embeddings(model, dataloader, save_path="embeddings.npy"):
     with torch.no_grad():
         for img, _, fnames in dataloader:
             img = img.to(device)
-            emb = model.backbone(img).flatten(start_dim=1)
+
+            if selected_model == "dino": 
+                emb = model.student_backbone(img).flatten(start_dim=1)
+            else:
+                emb = model.backbone(img).flatten(start_dim=1)              
             embeddings.append(emb.cpu())
             filenames.extend(fnames)
 
