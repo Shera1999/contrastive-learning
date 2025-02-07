@@ -93,9 +93,9 @@ Run the Jupyter Notebook:
 jupyter notebook main.ipynb
 ```
 Inside the notebook, you can:
-- **Plot the k nearest neighbors of a selected number of random images **
+- **Plot the k nearest neighbors** of a selected number of random images
 - **Visualize UMAP projection** of embeddings
-- **Visualize the images on the UMAP projections
+- **Visualize the images on the UMAP** projections
 - **Find nearest neighbors** for selected images
 - **Plot hexbin histograms** for labels in UMAP space (in case you have a labeled dataset)
 
