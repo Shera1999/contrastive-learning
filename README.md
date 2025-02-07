@@ -8,9 +8,10 @@ This repository contains a self-supervised learning pipeline for Imagae classifi
 ```
  CL/
 │── configs/                  # Configuration files (YAML format)
-│    ├── dataset_config.yaml     # Dataset paths and parameters
-│    ├── model_config.yaml       # Model selection and hyperparameters
-│    ├── main_config.yaml        # Training configurations
+│    ├── dataset_config.yaml        # Dataset paths and parameters
+│    ├── model_config.yaml          # Model selection and hyperparameters
+│    ├── main_config.yaml           # Training configurations
+│    ├── augmentations_config.yaml  # Augmentations configurations
 │
 │── data/                     # Data processing scripts
 │    ├── data_loader.py          # Loads training and test datasets
@@ -67,6 +68,7 @@ Modify the following configuration files as needed:
 - **`configs/dataset_config.yaml`** → Set dataset paths
 - **`configs/model_config.yaml`** → Choose between `simclr` and `dino`
 - **`configs/main_config.yaml`** → Training parameters
+- **`configs/main_config.yaml`** → Augmentations parameters where you can choose a custom augmentations with few parameters, or you can choose to use a set of augmentations defined by lightly for each model, and pick their values. 
 
 ---
 
@@ -119,22 +121,26 @@ Inside the notebook, you can:
 ---
 
 ## **Example Commands**
-### **Train DINO Model**
-```yaml
-# configs/model_config.yaml
-model:
-  selected_model: "dino"
-```
-```bash
-./main.sh
-```
+### **Configuration Files**
 
-### **Train SimCLR Model**
 ```yaml
 # configs/model_config.yaml
 model:
-  selected_model: "simclr"
+  selected_model: "selected_model"
 ```
+Here you can write the name of the model you want to be using, eg; simclr, dino
+
+
+```yaml
+# configs/augmentations_config.yaml
+augmentations:
+  use_custom: True
+  use_simclr: False
+  use_dino: False
+```
+or you can choose to use set of augmentations specifically desinged by lightly for each model, by setting use_model = True. After this, you can change each of their parameters model_params. 
+
+
 ```bash
 ./main.sh
 ```
