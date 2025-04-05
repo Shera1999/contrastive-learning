@@ -1,5 +1,5 @@
 model:
-  selected_model: "simsiam"  # options: simclr, nnclr, dino
+  selected_model: "moco"  # options: simclr, nnclr, dino
   
   
   simclr:
@@ -28,3 +28,14 @@ model:
     pred_hidden_dim: 128
     out_dim: 128
     learning_rate: 0.05
+
+
+  moco:
+    backbone: resnet18
+    input_dim: 512
+    proj_hidden_dim: 512
+    out_dim: 128
+    learning_rate: 0.06
+    momentum: 0.99
+    temperature: 0.1
+    memory_bank_size: 4096

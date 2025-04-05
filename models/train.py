@@ -4,6 +4,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from models.simclr import SimCLRModel
 from models.dino import DINOModel
 from models.simsiam import SimSiamModel
+from models.moco import MoCoModel
 from data.data_loader import dataloader_train
 import torch
 
@@ -41,6 +42,8 @@ elif selected_model == "dino":
     model = DINOModel(learning_rate=learning_rate, max_epochs=max_epochs)
 elif selected_model == "simsiam":
     model = SimSiamModel(learning_rate=learning_rate, max_epochs=max_epochs)
+elif selected_model == "moco":
+    model = MoCoModel(learning_rate=learning_rate, max_epochs=max_epochs)
 else:
     raise ValueError(f"Unknown model selected: {selected_model}")
 

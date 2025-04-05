@@ -19,6 +19,8 @@ elif selected_model == "dino":
     from models.dino import DINOModel as ModelClass
 elif selected_model == "simsiam":
     from models.simsiam import SimSiamModel as ModelClass
+elif selected_model == "moco":
+    from models.moco import MoCoModel as ModelClass
 else:
     raise ValueError(f"Model {selected_model} not supported")
 
@@ -47,6 +49,8 @@ def generate_embeddings(model, dataloader, save_path="embeddings.npy", filenames
             elif selected_model == "simsiam":
                 z, _ = model(img)
                 emb = z
+            elif selected_model == "moco":
+                emb = model(img)
             else:
                 emb = model.backbone(img).flatten(start_dim=1)              
             embeddings.append(emb.cpu())

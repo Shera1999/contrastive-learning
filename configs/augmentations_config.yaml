@@ -2,7 +2,8 @@ augmentations:
   use_custom: False
   use_simclr: False
   use_dino: False
-  use_simsiam: True
+  use_simsiam: False
+  use_moco: True
 
 
   shape_invariances:
@@ -120,3 +121,20 @@ augmentations:
     hf_prob: 0.5
     rr_prob: 0.0
     rr_degrees: null
+
+  moco_params:
+    cj_prob: 0.8
+    cj_strength: 0.5
+    cj_bright: 0.4
+    cj_contrast: 0.4
+    cj_sat: 0.4
+    cj_hue: 0.1
+    min_scale: 0.2
+    random_gray_scale: 0.2
+    gaussian_blur: 0.5
+    kernel_size: null
+    sigmas: [0.1, 2]
+    vf_prob: 0.0
+    hf_prob: 0.5
+    rr_prob: 0.0
+    rr_degrees: [-10, 10]
