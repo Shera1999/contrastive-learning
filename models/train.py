@@ -3,6 +3,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from models.simclr import SimCLRModel
 from models.dino import DINOModel
+from models.simsiam import SimSiamModel
 from data.data_loader import dataloader_train
 import torch
 
@@ -27,7 +28,7 @@ selected_model = model_config["model"].get("selected_model", "simclr")  # Defaul
 
 # Training Parameters
 max_epochs = main_config["training"]["max_epochs"]
-device = "auto" if main_config["training"]["device"] == "gpu" else config["training"]["device"]
+device = "auto" if main_config["training"]["device"] == "gpu" else main_config["training"]["device"]
 
 learning_rate = model_config["model"].get(selected_model, {}).get("learning_rate", 0.001)# Default to 0.001 if not set
 
@@ -38,6 +39,8 @@ if selected_model == "simclr":
     model = SimCLRModel(learning_rate=learning_rate, max_epochs=max_epochs)
 elif selected_model == "dino":
     model = DINOModel(learning_rate=learning_rate, max_epochs=max_epochs)
+elif selected_model == "simsiam":
+    model = SimSiamModel(learning_rate=learning_rate, max_epochs=max_epochs)
 else:
     raise ValueError(f"Unknown model selected: {selected_model}")
 

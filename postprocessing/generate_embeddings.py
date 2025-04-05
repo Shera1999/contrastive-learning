@@ -17,6 +17,8 @@ if selected_model == "simclr":
     from models.simclr import SimCLRModel as ModelClass
 elif selected_model == "dino":
     from models.dino import DINOModel as ModelClass
+elif selected_model == "simsiam":
+    from models.simsiam import SimSiamModel as ModelClass
 else:
     raise ValueError(f"Model {selected_model} not supported")
 
@@ -30,7 +32,7 @@ def load_model(model_path="checkpoints/final_model.pth", device="cuda" if torch.
     print(f" Loaded model from {model_path}")
     return model
 
-def generate_embeddings(model, dataloader, save_path="embeddings.npy"):
+def generate_embeddings(model, dataloader, save_path="embeddings.npy", filenames_path="filenames.npy"):
     """Generates embeddings and saves them to a file."""
     embeddings = []
     filenames = []
@@ -42,6 +44,9 @@ def generate_embeddings(model, dataloader, save_path="embeddings.npy"):
 
             if selected_model == "dino": 
                 emb = model.student_backbone(img).flatten(start_dim=1)
+            elif selected_model == "simsiam":
+                z, _ = model(img)
+                emb = z
             else:
                 emb = model.backbone(img).flatten(start_dim=1)              
             embeddings.append(emb.cpu())
@@ -50,7 +55,11 @@ def generate_embeddings(model, dataloader, save_path="embeddings.npy"):
     embeddings = torch.cat(embeddings, 0)
     embeddings = normalize(embeddings)
     np.save(save_path, embeddings)
+    np.save(filenames_path, np.array(filenames))
+
     print(f" Embeddings saved to {save_path}")
+    print(f" Filenames saved to {filenames_path}")
+    
     return embeddings, filenames
 
 def generate_umap_projection(embeddings, save_path="embeddings_2d.npy"):

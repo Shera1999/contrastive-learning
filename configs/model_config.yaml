@@ -1,5 +1,5 @@
 model:
-  selected_model: "dino"  # options: simclr, nnclr, dino
+  selected_model: "simsiam"  # options: simclr, nnclr, dino
   
   
   simclr:
@@ -20,3 +20,11 @@ model:
     freeze_last_layer: 1
     warmup_teacher_temp_epochs: 5
     learning_rate: 0.001
+
+  simsiam:
+    backbone: "resnet18"
+    input_dim: 512
+    proj_hidden_dim: 512
+    pred_hidden_dim: 128
+    out_dim: 128
+    learning_rate: 0.05

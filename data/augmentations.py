@@ -8,6 +8,7 @@ import random
 from lightly.transforms.multi_view_transform import MultiViewTransform
 from data.simclr_augmentations import get_simclr_transform
 from data.dino_augmentations import get_dino_transform
+from data.simsiam_augmentations import get_simsiam_transform
 
 class GaussianNoise:
     """Applies random Gaussian noise to a tensor.
@@ -49,6 +50,9 @@ class Augmentations:
         
         if self.augmentations.get("use_dino", False):
             return get_dino_transform()
+
+        if self.augmentations.get("use_simsiam", False):
+            return get_simsiam_transform()
 
         if self.augmentations.get("use_custom", False):
             return self.create_custom_augmentations()
