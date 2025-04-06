@@ -3,7 +3,9 @@ augmentations:
   use_simclr: False
   use_dino: False
   use_simsiam: False
-  use_moco: True
+  use_moco: False
+  use_byol: True
+
 
 
   shape_invariances:
@@ -138,3 +140,36 @@ augmentations:
     hf_prob: 0.5
     rr_prob: 0.0
     rr_degrees: [-10, 10]
+
+  byol_params:
+  augmentations:
+  use_byol: True
+  use_simclr: False
+  use_dino: False
+  use_simsiam: False
+  use_moco: False
+  use_custom: False
+
+byol_params:
+  cj_prob: 0.8
+  cj_strength: 1.0
+  cj_bright: 0.4
+  cj_contrast: 0.4
+  cj_sat: 0.2
+  cj_hue: 0.1
+  min_scale: 0.08
+  random_gray_scale: 0.2
+  sigmas: [0.1, 2]
+  kernel_size: null
+  vf_prob: 0.0
+  hf_prob: 0.5
+  rr_prob: 0.0
+  rr_degrees: null
+
+  view1:
+    gaussian_blur: 1.0
+    solarization_prob: 0.0
+
+  view2:
+    gaussian_blur: 0.1
+    solarization_prob: 0.2

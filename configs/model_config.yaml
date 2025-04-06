@@ -1,5 +1,5 @@
 model:
-  selected_model: "moco"  # options: simclr, nnclr, dino
+  selected_model: "byol"  # options: simclr, nnclr, dino
   
   
   simclr:
@@ -39,3 +39,13 @@ model:
     momentum: 0.99
     temperature: 0.1
     memory_bank_size: 4096
+
+
+  byol:
+    backbone: resnet18
+    input_dim: 512
+    proj_hidden_dim: 1024
+    pred_hidden_dim: 1024
+    out_dim: 256
+    learning_rate: 0.05
+    momentum: 0.996

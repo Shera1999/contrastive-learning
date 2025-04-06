@@ -10,6 +10,7 @@ from data.simclr_augmentations import get_simclr_transform
 from data.dino_augmentations import get_dino_transform
 from data.simsiam_augmentations import get_simsiam_transform
 from data.moco_augmentations import get_moco_transform
+from data.byol_augmentations import get_byol_transform
 
 class GaussianNoise:
     """Applies random Gaussian noise to a tensor.
@@ -57,6 +58,9 @@ class Augmentations:
         
         if self.augmentations.get("use_moco", False):
             return get_moco_transform()
+        
+        if self.augmentations.get("use_byol", False):
+            return get_byol_transform(self.config["byol_params"], self.input_size)
 
         if self.augmentations.get("use_custom", False):
             return self.create_custom_augmentations()

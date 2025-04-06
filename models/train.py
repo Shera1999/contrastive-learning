@@ -5,6 +5,7 @@ from models.simclr import SimCLRModel
 from models.dino import DINOModel
 from models.simsiam import SimSiamModel
 from models.moco import MoCoModel
+from models.byol import BYOLModel
 from data.data_loader import dataloader_train
 import torch
 
@@ -44,6 +45,8 @@ elif selected_model == "simsiam":
     model = SimSiamModel(learning_rate=learning_rate, max_epochs=max_epochs)
 elif selected_model == "moco":
     model = MoCoModel(learning_rate=learning_rate, max_epochs=max_epochs)
+elif selected_model == "byol":
+    model = BYOLModel(learning_rate=learning_rate, max_epochs=max_epochs)
 else:
     raise ValueError(f"Unknown model selected: {selected_model}")
 
