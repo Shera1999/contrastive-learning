@@ -193,10 +193,12 @@ This section showcases examples of how the learned representations from contrast
 These examples use galaxy cutouts from the Cosmological Jellyfish project to train a SimCLR model.
 
 * **UMAP Projection**
-  `UMAP_jellyfish.png` shows the 2D UMAP projection of the learned embedding space using SimCLR. The structure shows how galaxies with similar morphologies are grouped together in the learned representation.
+  ![](UMAP_jellyfish.png)
+  In the image above we see the 2D UMAP projection of the learned embedding space using SimCLR. The structure shows how galaxies with similar morphologies are grouped together in the learned representation.
 
 * **Nearest Neighbors Visualization**
-  `NN_jellyfish.jpg` presents the top-5 nearest neighbors for several query images. The overlaid scores indicate the model-inferred probability of each galaxy being a jellyfish. As shown, the retrieved neighbors not only look visually similar but also have high probability scores, confirming that the model effectively clusters jellyfish galaxies in the learned space.
+  ![](NN_jellyfish.jpg)
+  This result presents the top-10 nearest neighbors for several query images. The overlaid scores indicate the model-inferred probability of each galaxy being a jellyfish. As shown, the retrieved neighbors not only look visually similar but also have high probability scores, confirming that the model effectively clusters jellyfish galaxies in the learned space.
 
 ---
 
@@ -206,13 +208,19 @@ These examples use galaxy cutouts from the Cosmological Jellyfish project to tra
 X-ray maps of galaxy clusters from the [TNG-Cluster simulations](https://www.tng-project.org/cluster/), using three projections across 8 snapshots.
 
 * **UMAP Projection**
-  `UMAP_X-ray.png` shows the learned embedding space using DINO on raw X-ray cluster maps. Different clusters and morphologies emerge in distinct regions of the UMAP plot.
+  ![](NN_jellyfish.jpg)
+  `This image above, shows the learned embedding space using DINO on raw X-ray cluster maps, It can be seen that different clusters and morphologies emerge in distinct regions of the UMAP plot.
 
 * **Nearest Neighbors Visualization**
-  `NN_X-ray.jpg` displays visually similar clusters retrieved via nearest neighbors in embedding space. The similarity of X-ray morphology among neighbors supports the model’s ability to capture meaningful visual representations.
+    ![](NN_jellyfish.jpg)
+
+  The image above, displays visually similar clusters retrieved via nearest neighbors in embedding space. The similarity of X-ray morphology among neighbors supports the model’s ability to capture meaningful visual representations.
 
 * **Hexbin: Observables and Unobservables**
-  `umap_observables.png` and `umap_unobservables.png` show 2D hexbin histograms of observable and unobservable physical properties (e.g., X-ray luminosity, merger stage) mapped onto the learned 2D UMAP space. The visible clustering patterns suggest that the model has captured underlying astrophysical structure in the data, even though it was trained without labels.
+  ![](umap_observables.png)
+  ![](umap_unobservables.png)
+
+  These results show 2D hexbin histograms of observable and unobservable physical properties (e.g., X-ray luminosity, merger stage) mapped onto the learned 2D UMAP space. The visible clustering patterns suggest that the model has captured underlying astrophysical structure in the data, even though it was trained without labels.
 
 These insights form the basis for the next project:
 👉 [CINN\_spline: Conditional Invertible Neural Networks for Physical Inference](https://github.com/Shera1999/CINN_spline)
