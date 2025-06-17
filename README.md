@@ -208,11 +208,11 @@ These examples use galaxy cutouts from the Cosmological Jellyfish project to tra
 X-ray maps of galaxy clusters from the [TNG-Cluster simulations](https://www.tng-project.org/cluster/), using three projections across 8 snapshots.
 
 * **UMAP Projection**
-  ![](NN_jellyfish.jpg)
+  ![](UMAP_X-ray.png)
   `This image above, shows the learned embedding space using DINO on raw X-ray cluster maps, It can be seen that different clusters and morphologies emerge in distinct regions of the UMAP plot.
 
 * **Nearest Neighbors Visualization**
-    ![](NN_jellyfish.jpg)
+    ![](NN_X-ray.jpg)
 
   The image above, displays visually similar clusters retrieved via nearest neighbors in embedding space. The similarity of X-ray morphology among neighbors supports the model’s ability to capture meaningful visual representations.
 
