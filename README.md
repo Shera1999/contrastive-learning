@@ -6,35 +6,43 @@ This repository contains a self-supervised learning pipeline for Imagae classifi
 
 ## **Project Structure**
 ```
- CL/
-│── configs/                  # Configuration files (YAML format)
-│    ├── dataset_config.yaml        # Dataset paths and parameters
-│    ├── model_config.yaml          # Model selection and hyperparameters
-│    ├── main_config.yaml           # Training configurations
+CL/
+│── configs/
+│    ├── dataset_config.yaml         # Dataset paths and parameters
+│    ├── model_config.yaml           # Model selection and hyperparameters
+│    ├── main_config.yaml            # Training configurations
 │    ├── augmentations_config.yaml  # Augmentations configurations
 │
-│── data/                     # Data processing scripts
-│    ├── data_loader.py          # Loads training and test datasets
-│    ├── data_augmentor.py       # Applies data augmentations
-│    ├── simclr_augmentations.py # Augmentations for SimCLR
-│    ├── dino_augmentations.py   # Augmentations for DINO
+│── data/
+│    ├── data_loader.py              # Loads training and test datasets
+│    ├── data_augmentor.py           # Applies data augmentations
+│    ├── simclr_augmentations.py     # SimCLR transforms
+│    ├── dino_augmentations.py       # DINO transforms
+│    ├── simsiam_augmentations.py    # SimSiam transforms
+│    ├── moco_augmentations.py       # MoCo transforms
+│    ├── byol_augmentations.py       # BYOL transforms
 │
-│── models/                   # Model implementations
-│    ├── simclr.py               # SimCLR model definition
-│    ├── dino.py                 # DINO model definition
+│── models/
+│    ├── simclr.py                   # SimCLR model
+│    ├── dino.py                     # DINO model
+│    ├── simsiam.py                  # SimSiam model
+│    ├── moco.py                     # MoCo model
+│    ├── byol.py                     # BYOL model
 │
-│── postprocessing/            # Embedding analysis and visualization
-│    ├── generate_embeddings.py  # Extracts embeddings from trained models
-│    ├── plot_umap.py            # UMAP visualization of embeddings
-│    ├── plot_knn.py             # Nearest neighbor visualization
-│    ├── plot_hexbin.py          # 2D hexbin histogram visualization
+│── postprocessing/
+│    ├── generate_embeddings.py      # Extract embeddings
+│    ├── plot_umap.py                # UMAP projection
+│    ├── plot_knn.py                 # KNN visualization
+│    ├── plot_grid.py                # Grid-based UMAP image plot
+│    ├── plot_hexbin.py              # 2D hexbin histogram
 │
-│──  checkpoints/                 # Model checkpoints
-│──  logs/                        # Training logs
-│──  datasets/                    # Dataset directory
-│── main.sh                       # Shell script for training and embedding generation
-│── main.ipynb                    # Jupyter Notebook for postprocessing and visualization
-│── README.md                     # Project documentation
+│── checkpoints/                     # Saved models
+│── logs/                            # Training logs
+│── datasets/                        # Dataset folder
+│── main.sh                          # End-to-end training + embedding
+│── main.ipynb                       # Postprocessing and visualization
+│── README.md                        # Project documentation
+
 ```
 
 ---
@@ -66,7 +74,7 @@ pip install numpy torch torchvision pytorch-lightning matplotlib umap-learn pand
 Modify the following configuration files as needed:
 
 - **`configs/dataset_config.yaml`** → Set dataset paths
-- **`configs/model_config.yaml`** → Choose between `simclr` and `dino`
+- **`configs/model_config.yaml`** → Choose from: `simclr`, `dino`, `simsiam`, `moco`, `byol`
 - **`configs/main_config.yaml`** → Training parameters
 - **`configs/main_config.yaml`** → Augmentations parameters where you can choose a custom augmentations with few parameters, or you can choose to use a set of augmentations defined by lightly for each model, and pick their values. 
 
@@ -126,9 +134,8 @@ Inside the notebook, you can:
 ```yaml
 # configs/model_config.yaml
 model:
-  selected_model: "selected_model"
+  selected_model: "simclr"
 ```
-Here you can write the name of the model you want to be using, eg; simclr, dino
 
 
 ```yaml
@@ -137,6 +144,9 @@ augmentations:
   use_custom: True
   use_simclr: False
   use_dino: False
+  use_simsiam: False
+  use_moco: False
+  use_byol: False
 ```
 or you can choose to use set of augmentations specifically desinged by lightly for each model, by setting use_model = True. After this, you can change each of their parameters model_params. 
 
@@ -171,10 +181,41 @@ plot_hexbin_with_labels(
 
 ## **Examples **
 
+This section showcases examples of how the learned representations from contrastive models capture meaningful structure in image data. Below are UMAP projections and nearest neighbor visualizations for two different datasets: **jellyfish galaxies** and **X-ray maps of galaxy clusters**.
+
 ---
 
-## **Future Improvements**
--  Support additional self-supervised models (e.g., MoCo, BYOL)
--  Improve embedding quality with different backbone architectures
--  Extend label-based visualization techniques
+### **🪼 Jellyfish Galaxies**
+
+**Data Source**:
+[Zooniverse - Cosmological Jellyfish](https://www.zooniverse.org/projects/apillepich/cosmological-jellyfish)
+
+These examples use galaxy cutouts from the Cosmological Jellyfish project to train a SimCLR model.
+
+* **UMAP Projection**
+  `UMAP_jellyfish.png` shows the 2D UMAP projection of the learned embedding space using SimCLR. The structure shows how galaxies with similar morphologies are grouped together in the learned representation.
+
+* **Nearest Neighbors Visualization**
+  `NN_jellyfish.jpg` presents the top-5 nearest neighbors for several query images. The overlaid scores indicate the model-inferred probability of each galaxy being a jellyfish. As shown, the retrieved neighbors not only look visually similar but also have high probability scores, confirming that the model effectively clusters jellyfish galaxies in the learned space.
+
+---
+
+### **🌌 Galaxy Clusters — TNG-Cluster X-ray Maps**
+
+**Data Source**:
+X-ray maps of galaxy clusters from the [TNG-Cluster simulations](https://www.tng-project.org/cluster/), using three projections across 8 snapshots.
+
+* **UMAP Projection**
+  `UMAP_X-ray.png` shows the learned embedding space using DINO on raw X-ray cluster maps. Different clusters and morphologies emerge in distinct regions of the UMAP plot.
+
+* **Nearest Neighbors Visualization**
+  `NN_X-ray.jpg` displays visually similar clusters retrieved via nearest neighbors in embedding space. The similarity of X-ray morphology among neighbors supports the model’s ability to capture meaningful visual representations.
+
+* **Hexbin: Observables and Unobservables**
+  `umap_observables.png` and `umap_unobservables.png` show 2D hexbin histograms of observable and unobservable physical properties (e.g., X-ray luminosity, merger stage) mapped onto the learned 2D UMAP space. The visible clustering patterns suggest that the model has captured underlying astrophysical structure in the data, even though it was trained without labels.
+
+These insights form the basis for the next project:
+👉 [CINN\_spline: Conditional Invertible Neural Networks for Physical Inference](https://github.com/Shera1999/CINN_spline)
+
+---
 

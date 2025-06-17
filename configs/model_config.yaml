@@ -1,5 +1,5 @@
 model:
-  selected_model: "byol"  # options: simclr, nnclr, dino
+  selected_model: "moco"  # options: simclr, nnclr, dino
   
   
   simclr:

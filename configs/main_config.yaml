@@ -2,7 +2,7 @@ training:
   batch_size: 64
   #batch_size: 256
   input_size: 224
-  max_epochs: 1
+  max_epochs: 2
   num_workers: 4
   device: gpu
   learning_rate: 0.06

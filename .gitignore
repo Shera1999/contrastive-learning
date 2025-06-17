@@ -41,3 +41,16 @@ jellyfish_simclr_firstrun
 simclr_initial
 numpixels.ipynb
 jellyfish_seminar_plots
+change_csv.ipynb
+*.pdf
+*.npy
+*.csv
+.gitignore
+simclr_observables.png
+simclr_unobservables.png
+*.json
+HEY copy.ipynb
+filenames.npy
+
+
+

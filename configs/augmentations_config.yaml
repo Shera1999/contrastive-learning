@@ -1,10 +1,10 @@
 augmentations:
-  use_custom: False
+  use_custom: True
   use_simclr: False
   use_dino: False
   use_simsiam: False
   use_moco: False
-  use_byol: True
+  use_byol: False
 
 
 
